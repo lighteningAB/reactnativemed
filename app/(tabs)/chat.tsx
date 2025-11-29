@@ -18,7 +18,7 @@ export default function ChatScreen() {
   const theme = Colors[colorScheme ?? 'light'];
   
   // Use the new on-device pipeline hook
-  const { cactusLM, loading, chatExtract, proposeDiagnoses, explainAndMap } = useClinicalPipeline();
+  const { cactusLM, loading, stage, chatExtract, proposeDiagnoses, explainAndMap } = useClinicalPipeline();
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -47,10 +47,35 @@ export default function ChatScreen() {
         return;
       }
       setPatientData(data);
+      
+      // Add extracted JSON to chat
+      setMessages(prev => [...prev, { 
+        role: 'assistant', 
+        content: "Extracted Patient Data:\n" + JSON.stringify(data, null, 2) 
+      }]);
 
       // Step 2: Propose Diagnoses (On-Device)
       const candidates = await proposeDiagnoses(data);
       
+      if (candidates.length === 0) {
+        console.warn("No diagnoses proposed. Check logs for raw LLM output.");
+        Alert.alert('Diagnosis Failed', 'The model could not generate a valid diagnosis list. Please try again or rephrase symptoms.');
+        
+        setMessages(prev => [...prev, { 
+           role: 'assistant', 
+           content: "System: Failed to propose diagnoses. The model output could not be parsed." 
+        }]);
+
+        setDiagnoses([]);
+        return;
+      }
+
+      // Add diagnoses to chat
+      setMessages(prev => [...prev, { 
+        role: 'assistant', 
+        content: "Proposed Diagnoses:\n" + candidates.map(c => `- ${c}`).join('\n') 
+      }]);
+
       // Step 3: Map & Explain (On-Device)
       const final = await explainAndMap(data, candidates);
       setDiagnoses(final);
@@ -125,7 +150,16 @@ export default function ChatScreen() {
         disabled={loading}
       >
         {loading ? (
-          <ActivityIndicator color="#fff" />
+          <ThemedView style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: 'transparent' }}>
+            <ActivityIndicator color="#fff" style={{ marginRight: 8 }} />
+            <ThemedText style={styles.analyzeText}>
+              {stage === 'extracting' ? 'Extracting Data...' :
+               stage === 'proposing' ? 'Proposing Diagnoses...' :
+               stage === 'mapping' ? 'Mapping SNOMED...' :
+               stage === 'explaining' ? 'Explaining...' : 
+               'Processing...'}
+            </ThemedText>
+          </ThemedView>
         ) : (
           <ThemedText style={styles.analyzeText}>Analyze & Diagnose</ThemedText>
         )}
