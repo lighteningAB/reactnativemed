@@ -1,0 +1,22 @@
+[
+  { "id": "194828000", "term": "Stable angina pectoris" },
+  { "id": "41334000", "term": "Angina pectoris" },
+  { "id": "22298006", "term": "Myocardial infarction" },
+  { "id": "56018004", "term": "Costochondritis" },
+  { "id": "74400008", "term": "Appendicitis" },
+  { "id": "233604007", "term": "Pneumonia" },
+  { "id": "49601007", "term": "Cardiovascular disease" },
+  { "id": "392521001", "term": "History of asthma" },
+  { "id": "195967001", "term": "Asthma" },
+  { "id": "43878008", "term": "Streptococcal pharyngitis" },
+  { "id": "44054006", "term": "Diabetes mellitus type 2" },
+  { "id": "13645005", "term": "Chronic obstructive lung disease" },
+  { "id": "68566005", "term": "Urinary tract infectious disease" },
+  { "id": "40930008", "term": "Hypothyroidism" },
+  { "id": "87628006", "term": "Bacterial pneumonia" },
+  { "id": "266365003", "term": "Gastroesophageal reflux disease" },
+  { "id": "386661006", "term": "Panic disorder" },
+  { "id": "7061000", "term": "Pulmonary embolism" },
+  { "id": "6594002", "term": "Acute peptic ulcer" }
+]
+

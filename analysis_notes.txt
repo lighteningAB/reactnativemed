@@ -1,0 +1,58 @@
+// RF2 Extended Map columns:
+// 0: id
+// 1: effectiveTime
+// 2: active (1=active)
+// 3: moduleId
+// 4: refsetId
+// 5: referencedComponentId (SNOMED Concept ID)
+// 6: mapGroup
+// 7: mapPriority
+// 8: mapRule
+// 9: mapAdvice (Term/Description often found here or we need a separate description file)
+// 10: mapTarget (OPCS code)
+
+// Wait, the file provided `xder2_iisssciRefset_OPCS-4.8ExtendedMapFull_GB_20210324.txt` 
+// is a map from SNOMED -> OPCS-4 (Procedure codes).
+// It does NOT contain the SNOMED concept *Terms* (descriptions) in a structured way, 
+// except sometimes in `mapAdvice` as human readable text, but that is unreliable.
+
+// To do vector search properly, we need the SNOMED *Descriptions* (Terms).
+// This file maps SNOMED ID (referencedComponentId) to OPCS Code (mapTarget).
+
+// However, looking at the `mapAdvice` column in the `head` output:
+// "Not in scope of the classification"
+// "Additional code mandatory for Y464"
+// "High level concept"
+// It does NOT consistently have the SNOMED term.
+
+// CRITICAL ISSUE: This file alone is insufficient to build a search index of SNOMED Terms.
+// It is a map file, not a Description file.
+// A standard SNOMED release has `sct2_Description_Full-en_...txt`.
+
+// BUT, the user asked to use *this* file.
+// Maybe they think it has the terms? Or maybe they want to map to OPCS?
+// "Can you use this instead [of the json subset]" implies they want to use it for the source of truth.
+
+// If I look at line 14:
+// "ALWAYS Y05.1 | ADDITIONAL CODE POSSIBLE"
+// This is advice about the target, not the source term.
+
+// I must clarify or try to extract what I can. 
+// Actually, I see `mapTarget` is an OPCS code. `referencedComponentId` is the SNOMED ID.
+// Without the descriptions, I cannot embed "Chest Pain" and find the ID.
+// I can only embed... nothing?
+
+// Let's look deeper into the file to see if there are other columns or if I missed something.
+// The header is:
+// id	effectiveTime	active	moduleId	refsetId	referencedComponentId	mapGroup	mapPriority	mapRule	mapAdvice	mapTarget	correlationId	mapBlock
+
+// This is definitely an Extended Map.
+// I cannot do "Text -> SNOMED ID" search with *only* this file effectively, unless I can find the term in `mapAdvice`.
+// But `mapAdvice` seems to contain mapping rules, not the concept term itself.
+
+// HYPOTHESIS: The user might have uploaded the wrong file, or expects me to extract *something* from it.
+// OR, maybe they just want to use the IDs from here? But I still need text to embed.
+
+// Let's check if I can find *any* lines with actual terms in mapAdvice.
+// I'll search for a known term like "Appendectomy" or "excision" in the file to see if it appears.
+

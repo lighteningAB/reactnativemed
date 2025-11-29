@@ -1,0 +1,32 @@
+// Grep failed to find "appendi". 
+// This confirms `mapAdvice` does NOT contain the SNOMED terms.
+// This file is a mapping from SNOMED -> OPCS (Procedures).
+// It is NOT a dictionary of SNOMED Terms.
+
+// The user wants to "use this instead [of the subset JSON]".
+// The subset JSON had: { "id": "...", "term": "..." }.
+// This file has: { "referencedComponentId": "...", "mapTarget": "..." }.
+// It lacks the "term".
+
+// I cannot build a semantic search index (Text -> ID) without the Text.
+
+// PROPOSAL:
+// I will explain this limitation to the user.
+// "This file maps SNOMED IDs to OPCS codes, but it doesn't contain the English terms (Descriptions) for the SNOMED IDs. To search by text (e.g. 'chest pain'), I need the SNOMED Description file (sct2_Description_...)."
+
+// HOWEVER, to be helpful, maybe I can simulate it or ask if they have the description file.
+// BUT, maybe they *think* it works.
+// I should try to read the file to see if I am missing anything.
+// `head` showed `mapAdvice` having "Not in scope...", "Additional code...".
+
+// Wait, I should check if there is *any* text column I missed.
+// id, effectiveTime, active, moduleId, refsetId, referencedComponentId, mapGroup, mapPriority, mapRule, mapAdvice, mapTarget, correlationId, mapBlock.
+// None of these are "term" or "description".
+
+// If I assume the user *only* has this file and wants to use it:
+// I technically can't do the "Text -> SNOMED" mapping part of the pipeline with *just* this file.
+
+// ACTION:
+// I will create a utility to parse it, BUT I will have to warn the user that it lacks terms.
+// OR, I can check if there are other files in `public/` or `assets/` that might help.
+
