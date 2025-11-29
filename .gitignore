@@ -41,3 +41,68 @@ app-example
 # generated native folders
 /ios
 /android
+
+# Node modules
+node_modules/
+
+# Expo
+.expo/
+.expo-shared/
+expo-debug.log
+expo-*.log
+
+# EAS
+.eas/
+.eas-build-cache/
+eas-build-cache/
+
+# Android
+android/.gradle/
+android/local.properties
+android/app/build/
+android/build/
+*.keystore
+*.jks
+*.keystore.properties
+
+# iOS / Xcode
+ios/Pods/
+ios/DerivedData/
+ios/build/
+*.xcworkspace
+*.xcuserdata
+*.xcscheme
+Pods/
+
+# Gradle / build artifacts
+.gradle/
+build/
+dist/
+tmp/
+.cache/
+
+# Environment / secrets
+.env
+.env.*
+secrets.json
+keystore.jks
+key.jks
+
+# IDEs
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/credentials/
